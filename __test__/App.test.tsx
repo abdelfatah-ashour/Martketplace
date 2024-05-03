@@ -5,32 +5,15 @@ import {
   renderHook,
   waitFor,
 } from "@testing-library/react";
-import { http, HttpResponse } from "msw";
-import { setupServer } from "msw/node";
 import React from "react";
-import { mockCategories, mockProducts } from "../__mocks__/mockData";
-import { config } from "../src/lib/config";
+import { server } from "../__mocks__/server";
 import Products from "../src/pages/Products";
 import categoriesService from "../src/services/categoriesService";
 import productsService from "../src/services/productsService";
 
-const { apiUrl } = config;
-
 afterAll(() => {
   cleanup();
 });
-
-const server = setupServer(
-  http.get(`${apiUrl}/products`, () =>
-    HttpResponse.json(mockProducts, { status: 200 })
-  ),
-  http.get(`${apiUrl}/products/categories`, () =>
-    HttpResponse.json(mockCategories, { status: 200 })
-  ),
-  http.get(`${apiUrl}/products/category/${mockCategories[0]}`, () =>
-    HttpResponse.json(mockCategories, { status: 200 })
-  )
-);
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
