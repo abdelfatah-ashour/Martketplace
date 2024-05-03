@@ -6,9 +6,6 @@ import { mockCategories, mockProducts } from "./mockData";
 const { apiUrl } = config;
 
 export const handlers = [
-  http.get(`${apiUrl}/products`, () =>
-    HttpResponse.json(mockProducts, { status: 200 })
-  ),
   http.get(`${apiUrl}/products/categories`, () =>
     HttpResponse.json(mockCategories, { status: 200 })
   ),
