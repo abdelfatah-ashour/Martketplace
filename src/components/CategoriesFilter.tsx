@@ -33,6 +33,7 @@ export default function CategoriesFilter() {
               }
             )}
             type="button"
+            role="button"
             onClick={() => handleSelectCategory(category)}
           >
             {category}

@@ -1,7 +1,7 @@
 import Api from "@/lib/api";
 import { create } from "zustand";
 
-interface ICategories {
+export interface ICategories {
   categories: string[];
   selectedCategory: string | null;
   getCategories: () => void;

@@ -7,7 +7,10 @@ export default function ProductsGrid() {
   return (
     <>
       {loaded ? (
-        <div className="grid grid-cols-12 gap-6 gap-y-12">
+        <div
+          className="grid grid-cols-12 gap-6 gap-y-12"
+          data-testid="PRODUCTS_WRAPPER"
+        >
           {products.map((product) => (
             <div
               key={product.id}

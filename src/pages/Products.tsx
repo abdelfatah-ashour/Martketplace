@@ -18,7 +18,6 @@ export default function Products() {
 
   useEffect(() => {
     getProducts();
-    return () => {};
   }, [getProducts]);
 
   return (
