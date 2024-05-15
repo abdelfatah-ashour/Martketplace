@@ -7,38 +7,53 @@ interface IProducts {
   loaded: boolean;
   loading: boolean;
   error: string | null;
+  cache: Map<string, IProduct[]>;
   getProductsByCategory: (category: string) => void;
 }
 
-const productService = create<IProducts>((set) => ({
+setInterval(() => {
+  productService.setState({
+    cache: new Map(),
+  });
+}, 5000);
+
+const productService = create<IProducts>((set, get) => ({
   products: [],
   loading: false,
   loaded: false,
   error: null,
+  cache: new Map(),
 
   async getProductsByCategory(category) {
-    set(() => ({
-      loading: true,
-      products: [],
-    }));
-    const products = await new Api()
-      .get<IProduct[]>(`/products/category/${category}`)
-      .catch(() => {
-        set(() => ({
-          error: "something went wrong.",
-        }));
-      })
-      .finally(() => {
-        set(() => ({
-          loading: false,
-        }));
-      });
-
-    if (products) {
+    if (get().cache.has(category)) {
       set(() => ({
-        products,
-        loaded: true,
+        products: get().cache.get(category),
       }));
+    } else {
+      set(() => ({
+        loading: true,
+        products: [],
+      }));
+      const products = await new Api()
+        .get<IProduct[]>(`/products/category/${category}`)
+        .catch(() => {
+          set(() => ({
+            error: "something went wrong.",
+          }));
+        })
+        .finally(() => {
+          set(() => ({
+            loading: false,
+          }));
+        });
+
+      if (products) {
+        get().cache.set(category, products),
+          set(() => ({
+            products,
+            loaded: true,
+          }));
+      }
     }
   },
 }));
